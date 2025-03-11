@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
-import winston from 'winston'
 import { createLogger, format, transports } from 'winston'
 
 interface DateRequest {
@@ -15,16 +14,6 @@ interface DateResponse {
   formattedDates: DateObject[]
 }
 
-// Configure logger
-const logger = createLogger({
-  level: 'debug',
-  format: format.combine(format.timestamp(), format.json()),
-  transports: [
-    new transports.Console(),
-    // Add BetterStack transport here if needed
-  ],
-})
-
 const app = express()
 const PORT = process.env.PORT || 3000
 
@@ -38,13 +27,10 @@ app.use(
 )
 
 app.get('/', (req: Request, res: Response) => {
-  logger.info('[GET /]')
   res.send('Welcome to Omega API')
 })
 
 app.post('/epoch', (req: Request, res: Response): void => {
-  logger.info('Request Received')
-
   const { todaysDateUTC, forwardDays } = req.body
 
   if (!todaysDateUTC || typeof forwardDays !== 'number') {
@@ -53,8 +39,6 @@ app.post('/epoch', (req: Request, res: Response): void => {
     })
   }
 
-  logger.info('Request Body Parsed')
-
   const startDate = new Date(todaysDateUTC)
   if (isNaN(startDate.getTime())) {
     res.status(400).json({
@@ -62,26 +46,12 @@ app.post('/epoch', (req: Request, res: Response): void => {
     })
   }
 
-  logger.info('Date Validity Checked')
-
   const endDate = new Date(startDate)
   endDate.setDate(startDate.getDate() + forwardDays)
-  logger.info('Date Range Created')
 
   const startDateEpoch = startDate.getTime()
-  logger.info('Start Date Converted')
 
   const endDateEpoch = endDate.getTime()
-  logger.info('End Date Converted')
-
-  logger.info('Response Sent', {
-    todaysDateUTC,
-    startDateEpoch,
-    endDateEpoch,
-    forwardDays,
-    ipAddress: req.ip,
-    rawBody: JSON.stringify(req.body),
-  })
 
   res.json({
     todaysDateUTC,
