@@ -26,6 +26,8 @@ const logger = createLogger({
 })
 
 const app = express()
+const PORT = process.env.PORT || 3000
+
 app.use(express.json())
 app.use(
   cors({
@@ -123,6 +125,6 @@ app.post('/agentus/convert-dates', (req: Request, res: Response): void => {
   res.json(response)
 })
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000')
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
 })
