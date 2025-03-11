@@ -2,7 +2,7 @@
   "name": "omega",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/index.ts",
@@ -24,7 +24,6 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.10",
     "ts-node": "^10.9.2",
-    "tsc": "^2.0.4",
     "typescript": "^5.8.2"
   }
 }
